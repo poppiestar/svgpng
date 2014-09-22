@@ -37,7 +37,7 @@ module.exports = function(grunt) {
       }
     },
     sprite: {
-      png: {
+      svg: {
         src: 'images/png/**/*.png',
         destImg: 'images/svgSprite.png',
         destCSS: 'sass/_sd-png-sprite.scss',
