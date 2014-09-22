@@ -12,7 +12,7 @@
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-imagemin": "^0.8.1",
     "grunt-spritesmith": "^2.1.1",
-    "grunt-svg2png": "^0.2.5",
-    "grunt-svgmin": "^1.0.0"
+    "grunt-svg-sprite": "^0.3.2",
+    "grunt-svg2png": "^0.2.5"
   }
 }

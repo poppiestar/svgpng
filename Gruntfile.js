@@ -3,19 +3,26 @@ module.exports = function(grunt) {
   // Add the grunt-mocha-test tasks.
   grunt.loadNpmTasks('grunt-svg2png');
   grunt.loadNpmTasks('grunt-spritesmith');
-  grunt.loadNpmTasks('grunt-svgmin');
   grunt.loadNpmTasks('grunt-contrib-imagemin');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-svg-sprite');
 
   grunt.initConfig({
-    svgmin: {
-      all: {
-        files: [{
-          expand: true,
-          cwd: 'images/',
-          src: ['**/*.svg'],
-          dest: 'images/svgtmp/'
-        }]
+    svgsprite: {
+      svg: {
+        src: ['images/svg'],
+        dest: '.',
+        options: {
+          verbose: 3,
+          keep: true,
+          render: {
+            css: false,
+            scss: {
+              template: 'template/svgSass.scss.mustache',
+              dest: 'sass/_sd-svg-sprite.scss'
+            }
+          }
+        }
       }
     },
     svg2png: {
@@ -23,24 +30,23 @@ module.exports = function(grunt) {
          // specify files in array format with multiple src-dest mapping
          files: [
            {
-             cwd: 'images/',
-             src: ['svgtmp/**/*.svg'],
+             src: ['svg/**/*.svg', '!svg/**/sprite.svg'],
              dest: 'images/png/'
            }
         ]
       }
     },
     sprite: {
-      svg: {
+      png: {
         src: 'images/png/**/*.png',
         destImg: 'images/svgSprite.png',
-        destCSS: 'sass/pngSprite.scss',
+        destCSS: 'sass/_sd-png-sprite.scss',
         algorithm: 'binary-tree',
         cssTemplate: 'template/pngSass.scss.mustache'
       }
     },
     imagemin: {
-      svg: {
+      png: {
         options: {
           optimizationLevel: 6
         },
@@ -50,13 +56,12 @@ module.exports = function(grunt) {
       }
     },
     clean: {
-      svg: ['images/png/', 'images/svgtmp/'],
+      svg: ['images/png/', 'svg/'],
       build: ['images/svgSprite.png', 'sass/pngSprite.scss']
     }
   });
 
-  grunt.registerTask('tidy', ['clean:svg', 'clean:build']);
-  grunt.registerTask('svg', ['svgmin', 'svg2png', 'sprite:svg', 'imagemin:svg', 'clean:svg']);
+  grunt.registerTask('svg', ['svgsprite', 'svg2png', 'sprite:png', 'imagemin:png', 'clean:svg']);
   grunt.registerTask('default', 'svg');
 
 };
